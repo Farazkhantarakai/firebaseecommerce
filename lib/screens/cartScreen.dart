@@ -178,26 +178,33 @@ class _CartScreenState extends State<CartScreen>
                         children: [
                           GestureDetector(
                             onTap: () {
-                              if (cartController.getCartItem.isEmpty) {
-                                Fluttertoast.showToast(
-                                    msg:
-                                        'Cart Cannot be Empty,try to add some items in the cart');
+                              if (cartController.getPromo.contains(promo)) {
+                                if (cartController.getCartItem.isEmpty) {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          'Cart Cannot be Empty,try to add some items in the cart');
+                                } else {
+                                  Get.to(() => const CheckOutScreen(),
+                                      arguments: {
+                                        "promo": promo!.trim(),
+                                        "description":
+                                            _descriptionController.text.trim(),
+                                        "addressDetails": addressDetail!.trim(),
+                                        "items": cartController
+                                            .getCartItem.values
+                                            .toList(),
+                                        "totalPrice":
+                                            cartController.getTotalPrice,
+                                        "cityName":
+                                            locationController.getCityName,
+                                        "streetName":
+                                            locationController.getStreetName,
+                                      });
+                                }
                               } else {
-                                Get.to(() => const CheckOutScreen(),
-                                    arguments: {
-                                      "promo": promo!.trim(),
-                                      "description":
-                                          _descriptionController.text.trim(),
-                                      "addressDetails": addressDetail!.trim(),
-                                      "items": cartController.getCartItem.values
-                                          .toList(),
-                                      "totalPrice":
-                                          cartController.getTotalPrice,
-                                      "cityName":
-                                          locationController.getCityName,
-                                      "streetName":
-                                          locationController.getStreetName,
-                                    });
+                                Fluttertoast.showToast(
+                                    msg: 'Promo is invalid or expired',
+                                    backgroundColor: backAppColor);
                               }
                             },
                             child: Container(

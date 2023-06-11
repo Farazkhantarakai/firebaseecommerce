@@ -7,40 +7,41 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class Order extends GetxController {
-  RxList<OrderModel> _orderList = <OrderModel>[].obs;
   final _firebaseFirestore = FirebaseFirestore.instance;
   final uId = FirebaseAuth.instance.currentUser!.uid;
 
-  get getOrders => _orderList;
-
-  void addOrders(OrderModel orderModel) async {
+  Future<String> addOrders(OrderModel orderModel) async {
+    String? response = '';
     try {
       await _firebaseFirestore
           .collection('user')
           .doc(uId)
           .collection('orders')
           .doc()
-          .set(orderModel.toMap());
+          .set(orderModel.toMap())
+          .then((value) {
+        response = 'success';
+      });
     } on FirebaseException catch (err) {
       Fluttertoast.showToast(
           msg: err.toString(), backgroundColor: backAppColor);
       debugPrint(err.toString());
     }
+    return response!;
   }
 
-  fetchOrders() async {
+  Future<List<OrderModel>> fetchOrders() async {
     QuerySnapshot querySnapshot = await _firebaseFirestore
-        .collection('users')
+        .collection('user')
         .doc(uId)
         .collection('orders')
         .get();
 
-    final allOrders = querySnapshot.docs.map((doc) {
-      Map<String, dynamic> orderData = doc.data() as Map<String, dynamic>;
-
-      return OrderModel.fromMap(orderData);
+    List<OrderModel> orderList = querySnapshot.docs.map<OrderModel>((doc) {
+      Map<String, dynamic> newItem = doc.data() as Map<String, dynamic>;
+      return OrderModel.fromMap(newItem);
     }).toList();
 
-    debugPrint(allOrders.toString());
+    return orderList;
   }
 }

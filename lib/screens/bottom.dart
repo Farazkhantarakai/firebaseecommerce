@@ -1,4 +1,4 @@
-import 'package:firebase_ecommerce/screens/Orders.dart';
+import 'package:firebase_ecommerce/screens/OrderScreen.dart';
 import 'package:firebase_ecommerce/screens/favourite.dart';
 import 'package:firebase_ecommerce/screens/home.dart';
 import 'package:firebase_ecommerce/screens/profile.dart';

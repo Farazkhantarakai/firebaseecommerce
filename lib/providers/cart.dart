@@ -13,6 +13,9 @@ class Cart extends GetxController {
   RxDouble total = 0.0.obs;
   List cartProductIds = [];
   RxBool _isLoading = false.obs;
+  final List<String> _promo = ['ge12f'];
+
+  List<String> get getPromo => _promo;
 
   RxMap<String, CartItem> cartItem = RxMap<String, CartItem>();
 

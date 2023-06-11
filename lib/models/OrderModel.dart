@@ -2,7 +2,6 @@ import 'cartitem.dart';
 
 class OrderModel {
   String? id;
-
   String? userName;
   String? email;
   List<CartItem> cartItem;
@@ -12,6 +11,8 @@ class OrderModel {
   String? promoCode;
   String? description;
   double? price;
+  int? dateTime;
+
   OrderModel(
       {required this.id,
       required this.cartItem,
@@ -22,7 +23,8 @@ class OrderModel {
       required this.description,
       required this.price,
       required this.userName,
-      required this.email});
+      required this.email,
+      required this.dateTime});
 
   toMap() {
     return {
@@ -35,14 +37,19 @@ class OrderModel {
       "description": description,
       "price": price,
       "userName": userName,
-      "email": email
+      "email": email,
+      'dateTime': dateTime
     };
   }
 
   static fromMap(Map<String, dynamic> data) {
+    List<dynamic> cartItemsData = data['cartItem'] ?? [];
+    List<CartItem> cartItems =
+        cartItemsData.map<CartItem>((item) => CartItem.fromMap(item)).toList();
+
     return OrderModel(
         id: data['id'],
-        cartItem: data['cartItem'],
+        cartItem: cartItems,
         countryName: data['countryName'],
         cityName: data['cityName'],
         addressDetails: data['addressDetails'],
@@ -50,6 +57,7 @@ class OrderModel {
         description: data['description'],
         price: data['price'],
         userName: data['userName'],
-        email: data['email']);
+        email: data['email'],
+        dateTime: data['dateTime']);
   }
 }
