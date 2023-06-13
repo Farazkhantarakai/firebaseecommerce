@@ -1,5 +1,6 @@
 import 'package:firebase_ecommerce/models/cartitem.dart';
 import 'package:firebase_ecommerce/providers/firestoreMethods.dart';
+import 'package:firebase_ecommerce/screens/bottom.dart';
 import 'package:firebase_ecommerce/screens/home.dart';
 import 'package:firebase_ecommerce/utils/constants.dart';
 import 'package:firebase_ecommerce/widgets/detailscreen/dAppBar.dart';
@@ -139,12 +140,12 @@ class _DetailScreenState extends State<DetailScreen>
                               setState(() {
                                 isLoading = false;
                               });
-                              Get.to(() => const HomeScreen());
+                              Get.to(() => const BottomBar());
                             } else {
                               setState(() {
                                 isLoading = false;
                               });
-                              Get.to(() => const HomeScreen());
+                              Get.to(() => const BottomBar());
                             }
                           },
                           child: Container(

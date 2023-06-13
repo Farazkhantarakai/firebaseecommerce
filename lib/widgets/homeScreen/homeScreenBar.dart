@@ -23,7 +23,9 @@ class _HomeScreenBarState extends State<HomeScreenBar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
             icon: const Icon(
               Icons.menu,
               color: Color.fromARGB(216, 155, 153, 153),

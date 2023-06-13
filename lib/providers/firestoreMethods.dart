@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ecommerce/models/product.dart';
+import 'package:firebase_ecommerce/utils/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class FirestoreMethods extends GetxController {
@@ -88,11 +90,23 @@ class FirestoreMethods extends GetxController {
         .update({"imageUrl": imageUrl});
   }
 
-  updateProfileInfo(String name, String email, String phoneNumber) async {
-    await userCollection
-        .collection('user')
-        .doc(uId)
-        .update({"name": name, "email": email, "phoneNumber": phoneNumber});
+  Future<String> updateProfileInfo(
+      String name, String email, String phoneNumber) async {
+    String response = '';
+
+    try {
+      await userCollection.collection('user').doc(uId).update({
+        "name": name,
+        "email": email,
+        "phoneNumber": phoneNumber
+      }).then((value) {
+        response = 'success';
+      });
+    } on FirebaseException catch (err) {
+      Fluttertoast.showToast(
+          msg: err.toString(), backgroundColor: backAppColor);
+    }
+    return response;
   }
 
   Future<String> uploadImage(Uint8List image) async {

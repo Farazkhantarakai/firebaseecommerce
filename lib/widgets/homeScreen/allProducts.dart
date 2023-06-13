@@ -33,149 +33,28 @@ class _AllProductsState extends State<AllProducts> {
   Widget build(BuildContext context) {
     debugPrint(_firestoreController.getFirstLoaded.toString());
 
-    return Obx(() {
-      return _firestoreController.getFirstLoaded == false
-          ? GridView.builder(
-              padding: const EdgeInsets.only(top: 5),
-              itemCount: widget.products.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisExtent: 230, crossAxisSpacing: 6, crossAxisCount: 2),
-              itemBuilder: (context, index) {
-                // debugPrint(data.length.toString());
+    return Column(
+      children: [
+        Obx(() {
+          return _firestoreController.getFirstLoaded == false
+              ? Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.only(top: 5),
+                    itemCount: widget.products.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            mainAxisExtent: 230,
+                            crossAxisSpacing: 6,
+                            crossAxisCount: 2),
+                    itemBuilder: (context, index) {
+                      // debugPrint(data.length.toString());
 
-                return GestureDetector(
-                  onTap: () {
-                    Get.to(
-                      () => const DetailScreen(),
-                      arguments: widget.products[index].id,
-                    );
-                  },
-                  child: Stack(children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                          margin: const EdgeInsets.only(top: 35),
-                          // width: mdq.width * 0.5,
-                          // height: mdq.height * 0.2,
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                              color: Colors.white24,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20))),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: Get.height * 0.07,
-                              ),
-                              Text(
-                                widget.products[index].title!,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: Get.height * 0.01,
-                              ),
-                              Container(
-                                  width: double.infinity,
-                                  height: Get.height * 0.05,
-                                  decoration: const BoxDecoration(),
-                                  child: Text(
-                                    widget.products[index].ingredients!,
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white24,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                              SizedBox(
-                                height: Get.height * 0.01,
-                              ),
-                              RatingBar.builder(
-                                  itemSize: 17,
-                                  initialRating: widget.products[index].rating!,
-                                  itemBuilder: (context, index) {
-                                    return const Icon(
-                                      Icons.star,
-                                      color: yellowColor,
-                                    );
-                                  },
-                                  onRatingUpdate: (rating) {
-                                    debugPrint(rating.toString());
-                                  }),
-                              SizedBox(
-                                height: Get.height * 0.01,
-                              ),
-                              Text(
-                                '\$ ${widget.products[index].price}',
-                                style: const TextStyle(color: whiteColor),
-                              ),
-                            ],
-                          )),
-                    ),
-                    Positioned(
-                      top: -10,
-                      left: 20,
-                      child: Image.network(
-                        '${widget.products[index].imageUrl![0]}',
-                        width: 120,
-                        height: 120,
-                      ),
-                    ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: widget.products[index].isFavourite!
-                            ? IconButton(
-                                onPressed: () {
-                                  debugPrint(
-                                      widget.products[index].id.toString());
-                                  _changeFavourite(widget.products[index]);
-                                },
-                                icon: const Icon(
-                                  Icons.favorite,
-                                  color: Colors.white,
-                                ))
-                            : IconButton(
-                                onPressed: () {
-                                  _changeFavourite(widget.products[index]);
-                                },
-                                icon: const Icon(
-                                  Icons.favorite,
-                                  color: whiteColor,
-                                )))
-                  ]),
-                );
-              },
-            )
-          : GridView.builder(
-              padding: const EdgeInsets.only(top: 5),
-              itemCount: _firestoreController.getAllData.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisExtent: 230, crossAxisSpacing: 6, crossAxisCount: 2),
-              itemBuilder: (context, index) {
-                // debugPrint(data.length.toString());
-
-                List<Product> newProducts = _firestoreController.getAllData;
-
-                // debugPrint('new Products ${newProducts[0].title}');
-
-                return newProducts.length == 0
-                    ? const Center(
-                        child: Text(
-                          'No Item added yet',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19),
-                        ),
-                      )
-                    : GestureDetector(
+                      return GestureDetector(
                         onTap: () {
-                          Get.to(() => const DetailScreen(),
-                              arguments: newProducts[index].id);
+                          Get.to(
+                            () => const DetailScreen(),
+                            arguments: widget.products[index].id,
+                          );
                         },
                         child: Stack(children: [
                           Align(
@@ -197,7 +76,7 @@ class _AllProductsState extends State<AllProducts> {
                                       height: Get.height * 0.07,
                                     ),
                                     Text(
-                                      newProducts[index].title!,
+                                      widget.products[index].title!,
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold),
@@ -210,7 +89,7 @@ class _AllProductsState extends State<AllProducts> {
                                         height: Get.height * 0.05,
                                         decoration: const BoxDecoration(),
                                         child: Text(
-                                          newProducts[index].ingredients!,
+                                          widget.products[index].ingredients!,
                                           textAlign: TextAlign.start,
                                           style: const TextStyle(
                                               fontSize: 12,
@@ -223,7 +102,7 @@ class _AllProductsState extends State<AllProducts> {
                                     RatingBar.builder(
                                         itemSize: 17,
                                         initialRating:
-                                            newProducts[index].rating!,
+                                            widget.products[index].rating!,
                                         itemBuilder: (context, index) {
                                           return const Icon(
                                             Icons.star,
@@ -237,7 +116,7 @@ class _AllProductsState extends State<AllProducts> {
                                       height: Get.height * 0.01,
                                     ),
                                     Text(
-                                      '\$ ${newProducts[index].price}',
+                                      '\$ ${widget.products[index].price}',
                                       style: const TextStyle(color: whiteColor),
                                     ),
                                   ],
@@ -247,7 +126,7 @@ class _AllProductsState extends State<AllProducts> {
                             top: -10,
                             left: 20,
                             child: Image.network(
-                              '${newProducts[index].imageUrl![0]}',
+                              '${widget.products[index].imageUrl![0]}',
                               width: 120,
                               height: 120,
                             ),
@@ -255,12 +134,13 @@ class _AllProductsState extends State<AllProducts> {
                           Positioned(
                               bottom: 0,
                               right: 0,
-                              child: newProducts[index].isFavourite!
+                              child: widget.products[index].isFavourite!
                                   ? IconButton(
                                       onPressed: () {
-                                        debugPrint(
-                                            newProducts[index].id.toString());
-                                        _changeFavourite(newProducts[index]);
+                                        debugPrint(widget.products[index].id
+                                            .toString());
+                                        _changeFavourite(
+                                            widget.products[index]);
                                       },
                                       icon: const Icon(
                                         Icons.favorite,
@@ -268,7 +148,8 @@ class _AllProductsState extends State<AllProducts> {
                                       ))
                                   : IconButton(
                                       onPressed: () {
-                                        _changeFavourite(newProducts[index]);
+                                        _changeFavourite(
+                                            widget.products[index]);
                                       },
                                       icon: const Icon(
                                         Icons.favorite,
@@ -276,8 +157,151 @@ class _AllProductsState extends State<AllProducts> {
                                       )))
                         ]),
                       );
-              },
-            );
-    });
+                    },
+                  ),
+                )
+              : Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.only(top: 5),
+                    itemCount: _firestoreController.getAllData.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            mainAxisExtent: 230,
+                            crossAxisSpacing: 6,
+                            crossAxisCount: 2),
+                    itemBuilder: (context, index) {
+                      // debugPrint(data.length.toString());
+
+                      List<Product> newProducts =
+                          _firestoreController.getAllData;
+
+                      // debugPrint('new Products ${newProducts[0].title}');
+
+                      return newProducts.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'No Item added yet',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 19),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                Get.to(() => const DetailScreen(),
+                                    arguments: newProducts[index].id);
+                              },
+                              child: Stack(children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                      margin: const EdgeInsets.only(top: 35),
+                                      // width: mdq.width * 0.5,
+                                      // height: mdq.height * 0.2,
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white24,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20))),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            height: Get.height * 0.07,
+                                          ),
+                                          Text(
+                                            newProducts[index].title!,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: Get.height * 0.01,
+                                          ),
+                                          Container(
+                                              width: double.infinity,
+                                              height: Get.height * 0.05,
+                                              decoration: const BoxDecoration(),
+                                              child: Text(
+                                                newProducts[index].ingredients!,
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.white24,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
+                                          SizedBox(
+                                            height: Get.height * 0.01,
+                                          ),
+                                          RatingBar.builder(
+                                              itemSize: 17,
+                                              initialRating:
+                                                  newProducts[index].rating!,
+                                              itemBuilder: (context, index) {
+                                                return const Icon(
+                                                  Icons.star,
+                                                  color: yellowColor,
+                                                );
+                                              },
+                                              onRatingUpdate: (rating) {
+                                                debugPrint(rating.toString());
+                                              }),
+                                          SizedBox(
+                                            height: Get.height * 0.01,
+                                          ),
+                                          Text(
+                                            '\$ ${newProducts[index].price}',
+                                            style: const TextStyle(
+                                                color: whiteColor),
+                                          ),
+                                        ],
+                                      )),
+                                ),
+                                Positioned(
+                                  top: -10,
+                                  left: 20,
+                                  child: Image.network(
+                                    '${newProducts[index].imageUrl![0]}',
+                                    width: 120,
+                                    height: 120,
+                                  ),
+                                ),
+                                Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: newProducts[index].isFavourite!
+                                        ? IconButton(
+                                            onPressed: () {
+                                              debugPrint(newProducts[index]
+                                                  .id
+                                                  .toString());
+                                              _changeFavourite(
+                                                  newProducts[index]);
+                                            },
+                                            icon: const Icon(
+                                              Icons.favorite,
+                                              color: Colors.white,
+                                            ))
+                                        : IconButton(
+                                            onPressed: () {
+                                              _changeFavourite(
+                                                  newProducts[index]);
+                                            },
+                                            icon: const Icon(
+                                              Icons.favorite,
+                                              color: whiteColor,
+                                            )))
+                              ]),
+                            );
+                    },
+                  ),
+                );
+        }),
+      ],
+    );
   }
 }

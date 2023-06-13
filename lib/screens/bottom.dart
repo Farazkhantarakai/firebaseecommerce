@@ -5,6 +5,9 @@ import 'package:firebase_ecommerce/screens/profile.dart';
 import 'package:firebase_ecommerce/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart' as fa;
+import 'package:get/get.dart';
+
+import '../providers/bottomBar.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
@@ -14,13 +17,14 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  final BottomBarController _controller = Get.put(BottomBarController());
   final _page = const [
     HomeScreen(),
     OrderScreen(),
     FavouriteScreen(),
     Profile()
   ];
-  int _index = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +42,8 @@ class _BottomBarState extends State<BottomBar> {
               backgroundColor: blackColor,
               selectedItemColor: yellowColor,
               unselectedItemColor: const Color.fromARGB(255, 180, 170, 170),
-              currentIndex: _index,
-              onTap: (int index) {
-                setState(() {
-                  _index = index;
-                });
-              },
+              currentIndex: _controller.currentIndex.value,
+              onTap: _controller.changePage,
               items: const [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
                 BottomNavigationBarItem(
@@ -56,7 +56,7 @@ class _BottomBarState extends State<BottomBar> {
               ]),
         ),
       ),
-      body: _page[_index],
+      body: Obx(() => _page[_controller.currentIndex.value]),
     );
   }
 }

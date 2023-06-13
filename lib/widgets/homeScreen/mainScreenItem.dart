@@ -1,8 +1,13 @@
 import 'package:firebase_ecommerce/models/product.dart';
+import 'package:firebase_ecommerce/providers/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../models/cartitem.dart';
+import '../../screens/bottom.dart';
 import '../../utils/constants.dart';
 
 class MainScreenItem extends StatefulWidget {
@@ -15,6 +20,8 @@ class MainScreenItem extends StatefulWidget {
 }
 
 class _MainScreenItemState extends State<MainScreenItem> {
+  final _cartCont = Get.put(Cart());
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,7 +42,24 @@ class _MainScreenItemState extends State<MainScreenItem> {
               bottom: 1,
               left: 1,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  CartItem cartItem = CartItem(
+                      const Uuid().v4(),
+                      1,
+                      widget.product.id.toString(),
+                      widget.product.title,
+                      widget.product.imageUrl![0].toString(),
+                      widget.product.price.toString());
+
+                  final response = await _cartCont.addItemToCart(cartItem);
+                  if (response == true) {
+                    Fluttertoast.showToast(
+                        msg: 'Item Added Succefully',
+                        backgroundColor: blackColor);
+
+                    _cartCont.getAllCartItem();
+                  }
+                },
                 child: Container(
                   width: Get.width * 0.4,
                   height: Get.height * 0.06,

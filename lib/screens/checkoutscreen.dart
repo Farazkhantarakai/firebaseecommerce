@@ -4,7 +4,6 @@ import 'package:firebase_ecommerce/models/cartitem.dart';
 import 'package:firebase_ecommerce/providers/firestoreMethods.dart';
 import 'package:firebase_ecommerce/providers/order.dart';
 import 'package:firebase_ecommerce/screens/bottom.dart';
-import 'package:firebase_ecommerce/screens/home.dart';
 import 'package:firebase_ecommerce/utils/constants.dart';
 import 'package:firebase_ecommerce/widgets/checkoutscreen.dart/checkout.dart';
 import 'package:firebase_ecommerce/widgets/checkoutscreen.dart/checkoutprice.dart';
@@ -271,7 +270,8 @@ class _CheckOutScreenState extends State<CheckOutScreen>
                             setState(() {
                               isLoading = true;
                             });
-
+                            final _dateTime = DateTime.now();
+                            debugPrint(_dateTime.toString());
                             OrderModel orderModel = OrderModel(
                                 id: const Uuid().v4(),
                                 cartItem: cartItem,
@@ -283,8 +283,7 @@ class _CheckOutScreenState extends State<CheckOutScreen>
                                 price: data['totalPrice'],
                                 userName: name,
                                 email: _email,
-                                dateTime:
-                                    DateTime.now().millisecondsSinceEpoch);
+                                dateTime: _dateTime.millisecondsSinceEpoch);
                             final result = await _order.addOrders(orderModel);
 
                             if (result == 'success') {

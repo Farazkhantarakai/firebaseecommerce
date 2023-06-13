@@ -3,6 +3,7 @@ import 'package:firebase_ecommerce/providers/firestoreMethods.dart';
 import 'package:firebase_ecommerce/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
@@ -56,6 +57,8 @@ class _ProfileState extends State<Profile> {
         imageUrl = value['imageUrl'];
         email = value['email'];
         name = value['name'];
+        _phoneNumber = value['phoneNumber'];
+
         if (kDebugMode) {
           print(imageUrl);
         }
@@ -70,8 +73,7 @@ class _ProfileState extends State<Profile> {
         body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(20),
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              child: ListView(children: [
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -133,7 +135,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       TextFormField(
                         initialValue: email,
-                        readOnly: true,
+                        style: const TextStyle(color: Colors.white),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -173,7 +175,7 @@ class _ProfileState extends State<Profile> {
                       TextFormField(
                         initialValue: name,
                         keyboardType: TextInputType.text,
-                        readOnly: true,
+                        style: const TextStyle(color: Colors.white),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Field can not be null';
@@ -206,7 +208,9 @@ class _ProfileState extends State<Profile> {
                         height: 15,
                       ),
                       TextFormField(
+                        initialValue: _phoneNumber,
                         keyboardType: TextInputType.text,
+                        style: const TextStyle(color: Colors.white),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Field can not be null';
@@ -245,12 +249,19 @@ class _ProfileState extends State<Profile> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                             ),
-                            onPressed: () async {
-                              setState(() {
-                                fireController.updateProfileInfo(
-                                    _fullName!.trim(),
-                                    _email!.trim(),
-                                    _phoneNumber!.trim());
+                            onPressed: () {
+                              setState(() async {
+                                final result =
+                                    await fireController.updateProfileInfo(
+                                        _fullName!.trim(),
+                                        _email!.trim(),
+                                        _phoneNumber!.trim());
+
+                                if (result == 'success') {
+                                  Fluttertoast.showToast(
+                                      msg: 'Profile Updated Succeffuly',
+                                      backgroundColor: backAppColor);
+                                }
                               });
                             },
                             child: const Text(

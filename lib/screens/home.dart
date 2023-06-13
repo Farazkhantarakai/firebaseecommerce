@@ -7,6 +7,7 @@ import 'package:firebase_ecommerce/widgets/homeScreen/allProducts.dart';
 import 'package:firebase_ecommerce/widgets/homeScreen/homeScreenBar.dart';
 import 'package:firebase_ecommerce/widgets/homeScreen/mainScreenItem.dart';
 import 'package:firebase_ecommerce/widgets/homeScreen/searchBar.dart';
+import 'package:firebase_ecommerce/widgets/mainDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -39,13 +40,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1200));
     _secondController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     _animation =
         Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0.0, 0.0))
             .animate(_secondController);
     _secondController.forward();
     _categoryController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     _catogoryAnimation =
         Tween<Offset>(begin: const Offset(0, -1), end: const Offset(0, 0))
             .animate(_categoryController);
@@ -67,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return SafeArea(
         child: Scaffold(
             backgroundColor: backAppColor,
+            drawer: MainDrawer(),
             body: FutureBuilder(
                 future: FirestoreMethods().getData(),
                 builder: (context, snapshot) {
@@ -83,43 +85,43 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     );
                   }
                   List<Product> product = snapshot.data as List<Product>;
-                  return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const HomeScreenBar(),
-                            SizedBox(
-                              height: mdq.height * 0.01,
+                  return SingleChildScrollView(
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(children: [
+                          const HomeScreenBar(),
+                          SizedBox(
+                            height: mdq.height * 0.01,
+                          ),
+                          const SearchBarItem(),
+                          SizedBox(
+                            height: mdq.height * 0.02,
+                          ),
+                          SlideTransition(
+                            position: _animation,
+                            child: MainScreenItem(
+                              product: product[0],
                             ),
-                            const SearchBarItem(),
-                            SizedBox(
-                              height: mdq.height * 0.02,
+                          ),
+                          SizedBox(
+                            height: mdq.height * 0.03,
+                          ),
+                          SlideTransition(
+                              position: _catogoryAnimation,
+                              child: const CategorySection()),
+                          SizedBox(
+                            height: mdq.height * 0.02,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            height: mdq.height * 0.3,
+                            decoration: const BoxDecoration(),
+                            child: AllProducts(
+                              products: product,
                             ),
-                            SlideTransition(
-                              position: _animation,
-                              child: MainScreenItem(
-                                product: product[0],
-                              ),
-                            ),
-                            SizedBox(
-                              height: mdq.height * 0.03,
-                            ),
-                            SlideTransition(
-                                position: _catogoryAnimation,
-                                child: const CategorySection()),
-                            SizedBox(
-                              height: mdq.height * 0.02,
-                            ),
-                            Container(
-                              width: double.infinity,
-                              height: Get.height * 0.5,
-                              decoration: const BoxDecoration(),
-                              child: AllProducts(
-                                products: product,
-                              ),
-                            ),
-                          ]));
+                          ),
+                        ])),
+                  );
                 })));
   }
 }
